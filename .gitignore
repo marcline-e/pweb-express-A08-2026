@@ -3,3 +3,9 @@ node_modules
 .env
 
 src/generated/
+
+# Skill AI agent lokal (bukan bagian aplikasi)
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
