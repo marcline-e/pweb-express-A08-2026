@@ -9,3 +9,7 @@ src/generated/
 .claude/
 .windsurf/
 skills-lock.json
+
+dist/
+migration-preview.sql
+schema-main.prisma

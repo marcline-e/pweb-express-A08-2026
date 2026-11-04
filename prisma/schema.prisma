@@ -39,24 +39,32 @@ enum Currency {
 }
 
 model Hero {
-  id           Int          @id @default(autoincrement())
-  name         String       @unique
-  role         Role
-  lane         Lane
-  releaseYear  Int
-  priceBP      Int?
-  priceDiamond Int?
-  skins        Skin[]
-  owners       PlayerHero[]
+  id             Int          @id @default(autoincrement())
+  name           String       @unique
+  primaryRole    Role
+  secondaryRole  Role?
+  primaryLane    Lane
+  secondaryLane  Lane?
+  releaseDate    String?
+  releaseYear    Int
+  priceBP        Int?
+  priceDiamond   Int?
+  note           String?
+  skins          Skin[]
+  owners         PlayerHero[]
 }
 
 model Skin {
-  id           Int     @id @default(autoincrement())
-  name         String
-  rarity       Rarity
-  priceDiamond Int?
-  heroId       Int
-  hero         Hero    @relation(fields: [heroId], references: [id], onDelete: Cascade)
+  id             Int       @id @default(autoincrement())
+  name           String
+  heroId         Int
+  hero           Hero      @relation(fields: [heroId], references: [id], onDelete: Cascade)
+  rarity         Rarity
+  series         String?
+  releaseDate    String?
+  releaseYear    Int?
+  priceDiamond   Int?
+  acquisition    String?
 }
 
 model Player {

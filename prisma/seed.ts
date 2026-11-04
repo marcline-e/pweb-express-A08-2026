@@ -38,8 +38,16 @@ async function main() {
   await prisma.hero.createMany({
     data: heroes.map((h) => ({
       name: h.name,
-      role: toEnum(Role, h.primaryRole, "role"),
-      lane: toEnum(Lane, h.primaryLane, "lane"),
+      primaryRole: toEnum(Role, h.primaryRole, "primaryRole"),
+primaryLane: toEnum(Lane, h.primaryLane, "primaryLane"),
+secondaryRole: h.secondaryRole
+  ? toEnum(Role, h.secondaryRole, "secondaryRole")
+  : null,
+secondaryLane: h.secondaryLane
+  ? toEnum(Lane, h.secondaryLane, "secondaryLane")
+  : null,
+releaseDate: h.releaseDate || null,
+note: h.note || null,
       releaseYear: Number(h.releaseYear),
       priceBP: toNullableInt(h.priceBP),
       priceDiamond: toNullableInt(h.priceDiamond),
@@ -47,14 +55,19 @@ async function main() {
   });
 
   const skins = readCsv("skins.csv");
-  await prisma.skin.createMany({
-    data: skins.map((s) => ({
-      name: s.name,
-      heroId: Number(s.heroId),
-      rarity: toEnum(Rarity, s.rarity, "rarity"),
-      priceDiamond: toNullableInt(s.priceDiamond),
-    })),
-  });
+
+await prisma.skin.createMany({
+  data: skins.map((s) => ({
+    name: s.name,
+    heroId: Number(s.heroId),
+    rarity: toEnum(Rarity, s.rarity, "rarity"),
+    series: s.series || null,
+    releaseDate: s.releaseDate || null,
+    releaseYear: s.releaseYear ? Number(s.releaseYear) : null,
+    priceDiamond: toNullableInt(s.priceDiamond),
+    acquisition: s.acquisition || null,
+  })),
+});
 
   // TRUNCATE ... RESTART IDENTITY → urutan insert = id 1, 2, 3
   await prisma.player.createMany({

@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "db:migrate": "prisma migrate dev",
-    "db:generate": "prisma generate",
-    "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio",
-    "test:c": "tsx tests/person-c.test.ts"
-  },
+  "dev": "tsx watch src/server.ts",
+  "build": "tsc",
+  "start": "node dist/server.js",
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "db:migrate": "prisma migrate dev",
+  "db:generate": "prisma generate",
+  "db:seed": "tsx prisma/seed.ts",
+  "db:studio": "prisma studio",
+  "test:c": "tsx tests/person-c.test.ts"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -26,5 +29,10 @@
     "prisma": "^7.10.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "allowScripts": {
+    "@prisma/engines@7.10.1": true,
+    "esbuild@0.28.2": true,
+    "prisma@7.10.1": true
   }
 }
