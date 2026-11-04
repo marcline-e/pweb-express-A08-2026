@@ -15,8 +15,8 @@ interface CreateHeroInput {
   role?: string;
   lane?: string;
   releaseYear?: number;
-  priceBP?: number;
-  priceDiamond?: number;
+  priceBP?: number | null;
+  priceDiamond?: number | null;
 }
 
 const MAX_INT = 2_147_483_647;
@@ -32,7 +32,6 @@ export const heroService = {
 
     const validRoles = Object.values(Role) as string[];
 
-    // Role tidak valid menghasilkan daftar kosong
     if (role && !validRoles.includes(role)) {
       return {
         heroes: [],
@@ -110,8 +109,7 @@ export const heroService = {
       !input.role ||
       !input.lane ||
       input.releaseYear === undefined ||
-      input.priceBP === undefined ||
-      input.priceDiamond === undefined
+      input.releaseYear === null
     ) {
       throw new HttpError(400, "Data hero tidak lengkap");
     }
@@ -132,12 +130,21 @@ export const heroService = {
 
     if (
       !Number.isInteger(input.releaseYear) ||
-      !Number.isInteger(input.priceBP) ||
-      !Number.isInteger(input.priceDiamond) ||
-      input.priceBP < 0 ||
-      input.priceDiamond < 0
+      input.releaseYear < 0
     ) {
       throw new HttpError(400, "Data angka tidak valid");
+    }
+
+    const prices = [input.priceBP, input.priceDiamond];
+
+    for (const price of prices) {
+      if (
+        price !== undefined &&
+        price !== null &&
+        (!Number.isInteger(price) || price < 0)
+      ) {
+        throw new HttpError(400, "Data angka tidak valid");
+      }
     }
 
     try {
@@ -147,8 +154,8 @@ export const heroService = {
           primaryRole: role as Role,
           primaryLane: lane as Lane,
           releaseYear: input.releaseYear,
-          priceBP: input.priceBP,
-          priceDiamond: input.priceDiamond,
+          priceBP: input.priceBP ?? null,
+          priceDiamond: input.priceDiamond ?? null,
         },
       });
     } catch (error) {
